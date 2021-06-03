@@ -1,6 +1,8 @@
+const $arenas = document.querySelector('.arenas');
+
 const player1 = {
     name: 'SCORPION',
-    hp: 100,
+    hp: 77,
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['blades', 'swords'],
     attack: function() {
@@ -10,7 +12,7 @@ const player1 = {
 
 const player2 = {
     name: 'KITANA',
-    hp: 100,
+    hp: 85,
     img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
     weapon: ['frost', 'swords'],
     attack: function() {
@@ -19,8 +21,6 @@ const player2 = {
 };
 
 function createPlayer(playerClass, player) {
-    const $arenas = document.querySelector('.arenas');
-
     const $player = document.createElement('div');
     const $progressbar = document.createElement('div');
     const $character = document.createElement('div');
@@ -36,6 +36,7 @@ function createPlayer(playerClass, player) {
     
     $img.src = player.img;
     $name.innerHTML = player.name;
+    $life.style.width = player.hp + '%';
 
     $player.appendChild($progressbar);
     $player.appendChild($character);
