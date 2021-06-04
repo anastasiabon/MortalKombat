@@ -1,6 +1,5 @@
 const $arenas = document.querySelector('.arenas');
 const $randomButton = document.querySelector('.button');
-const damage = 20; // сколько % жизни отнимаем за одно нажатие на кнопку
 
 const player1 = {
     player: 1,
@@ -22,6 +21,13 @@ const player2 = {
     attack: function() {
         console.log(this.name + ' fight');
     },
+};
+
+function getDamage () {
+    const min = 0;
+    const max = 20;
+
+    return Math.ceil(Math.random() * (max - min) + min);
 };
 
 function createElement(tag, className) {
@@ -59,6 +65,7 @@ function createPlayer(playerObj) {
 
 function changeHP(player) {
     const $playerLife = document.querySelector('.player' + player.player + ' .life');
+    const damage = getDamage();
     const playerLost = player.hp <= 0 || player.hp < damage;
 
     player.hp = playerLost ? 0 : player.hp - damage;
