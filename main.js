@@ -3,7 +3,7 @@ const $arenas = document.querySelector('.arenas');
 const player1 = {
     player: 1,
     name: 'SCORPION',
-    hp: 77,
+    hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['blades', 'swords'],
     attack: function() {
@@ -14,7 +14,7 @@ const player1 = {
 const player2 = {
     player: 2,
     name: 'KITANA',
-    hp: 85,
+    hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
     weapon: ['frost', 'swords'],
     attack: function() {
