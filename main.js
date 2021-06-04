@@ -1,4 +1,6 @@
 const $arenas = document.querySelector('.arenas');
+const $randomButton = document.querySelector('.button');
+const damage = 20; // сколько % жизни отнимаем за одно нажатие на кнопку
 
 const player1 = {
     player: 1,
@@ -54,6 +56,31 @@ function createPlayer(playerObj) {
 
     return $player;
 };
+
+function changeHP(player) {
+    const $playerLife = document.querySelector('.player' + player.player + ' .life');
+    const playerLost = player.hp <= 0 || player.hp < damage;
+
+    player.hp = playerLost ? 0 : player.hp - damage;
+
+    $playerLife.style.width = player.hp + '%';
+
+    if (player.hp === 0) {
+        $arenas.appendChild(playerLose(player.name));
+    }
+};
+
+function playerLose(name) {
+    const $loseTitle = createElement('div', 'loseTitle');
+    $loseTitle.innerText = name + ' lost';
+
+    return $loseTitle;
+};
+
+$randomButton.addEventListener('click', function(){
+    changeHP(player1);
+    changeHP(player2);
+});
 
 $arenas.appendChild(createPlayer(player1));
 $arenas.appendChild(createPlayer(player2));
