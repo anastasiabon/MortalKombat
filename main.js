@@ -14,6 +14,9 @@ const player1 = {
     attack: function() {
         console.log(this.name + ' fight');
     },
+    changeHP: changeHP,
+    elHP: elHP,
+    renderHP: renderHP,
 };
 
 const player2 = {
@@ -25,6 +28,9 @@ const player2 = {
     attack: function() {
         console.log(this.name + ' fight');
     },
+    changeHP: changeHP,
+    elHP: elHP,
+    renderHP: renderHP,
 };
 
 function getDamage (max) {
@@ -64,15 +70,23 @@ function createPlayer(playerObj) {
     return $player;
 };
 
-function changeHP(player) {    
-    const $playerLife = document.querySelector('.player' + player.player + ' .life');
-    player.hp -= getDamage(20);
+function changeHP(damage) {
+    this.hp -= damage;
 
-    if (player.hp <= 0) {
-        player.hp = 0;
+    if (this.hp <= 0) {
+        this.hp = 0;
     }
 
-    $playerLife.style.width = player.hp + '%';
+    console.log(this);
+};
+
+function elHP () {
+    console.log(this);
+    return document.querySelector('.player' + this.player + ' .life')
+};
+
+function renderHP (el) {
+    el.style.width = this.hp + '%';
 };
 
 function playerWins(name) {
@@ -87,8 +101,11 @@ function playerWins(name) {
 };
 
 $randomButton.addEventListener('click', function(){
-    changeHP(player1);
-    changeHP(player2);
+    player1.changeHP(getDamage(20));
+    player1.renderHP(player1.elHP());
+
+    player2.changeHP(getDamage(20));
+    player2.renderHP(player2.elHP());
 
     if (player1.hp === 0 || player2.hp === 0) {
         $randomButton.disabled = true;
