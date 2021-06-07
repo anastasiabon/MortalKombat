@@ -5,34 +5,30 @@ const state = {
     winner: '',
 };
 
-const currentPlayers = [
-    {
-        player: 1,
-        name: 'SCORPION',
-        hp: 100,
-        img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
-        weapon: ['blades', 'swords'],
-        attack: function() {
-            console.log(this.name + ' fight');
-        },
+const player1 = {
+    player: 1,
+    name: 'SCORPION',
+    hp: 100,
+    img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
+    weapon: ['blades', 'swords'],
+    attack: function() {
+        console.log(this.name + ' fight');
     },
-    {
-        player: 2,
-        name: 'KITANA',
-        hp: 100,
-        img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
-        weapon: ['frost', 'swords'],
-        attack: function() {
-            console.log(this.name + ' fight');
-        },
-    }
-];
+};
 
-function getDamage () {
-    const min = 0;
-    const max = 20;
+const player2 = {
+    player: 2,
+    name: 'KITANA',
+    hp: 100,
+    img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
+    weapon: ['frost', 'swords'],
+    attack: function() {
+        console.log(this.name + ' fight');
+    },
+};
 
-    return Math.ceil(Math.random() * (max - min) + min);
+function getDamage (max) {
+    return Math.ceil(Math.random() * max);
 };
 
 function createElement(tag, className) {
@@ -68,49 +64,48 @@ function createPlayer(playerObj) {
     return $player;
 };
 
-function getWinner() {
-    currentPlayers.forEach(function(item) {
-        if (item.hp > 0) {
-            state.winner = item.name;
-        }
-    });
-};
-
 function changeHP(player) {    
     const $playerLife = document.querySelector('.player' + player.player + ' .life');
-    const damage = getDamage();
-    const playerLost = player.hp <= 0 || player.hp < damage;
+    player.hp -= getDamage(20);
 
-    player.hp = playerLost ? 0 : player.hp - damage;
+    if (player.hp <= 0) {
+        player.hp = 0;
+    }
 
     $playerLife.style.width = player.hp + '%';
-
-    if (player.hp === 0) {
-        $randomButton.disabled = true;
-        getWinner();
-        $arenas.appendChild(playerWin(state.winner));
-    }
 };
 
-function playerWin(name) {
+function playerWins(name) {
     const $winTitle = createElement('div', 'loseTitle');
-    $winTitle.innerText = name + ' wins!';
+    if (name) {
+        $winTitle.innerText = name + ' wins!';
+    } else {
+        $winTitle.innerText = 'Draw';
+    }
 
     return $winTitle;
 };
 
 $randomButton.addEventListener('click', function(){
-    currentPlayers.forEach(function(item) {
-        if (!state.winner) {
-            changeHP(item);
-        }
-    });
+    changeHP(player1);
+    changeHP(player2);
+
+    if (player1.hp === 0 || player2.hp === 0) {
+        $randomButton.disabled = true;
+    }
+
+    if (player1.hp === 0 && player1.hp < player2.hp) {
+        $arenas.appendChild(playerWins(player2.name));
+    } else if (player2.hp === 0 && player2.hp < player1.hp) {
+        $arenas.appendChild(playerWins(player1.name));
+    } else if (player1.hp === 0 && player2.hp === 0) {
+        $arenas.appendChild(playerWins())
+    }
 });
 
 function createArena () {
-    currentPlayers.forEach(function(item) {
-        $arenas.appendChild(createPlayer(item));
-    });
+    $arenas.appendChild(createPlayer(player1));
+    $arenas.appendChild(createPlayer(player2));
 }
 
 createArena();
