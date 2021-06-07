@@ -1,10 +1,6 @@
 const $arenas = document.querySelector('.arenas');
 const $randomButton = document.querySelector('.button');
 
-const state = {
-    winner: '',
-};
-
 const player1 = {
     player: 1,
     name: 'SCORPION',
@@ -76,12 +72,9 @@ function changeHP(damage) {
     if (this.hp <= 0) {
         this.hp = 0;
     }
-
-    console.log(this);
 };
 
 function elHP () {
-    console.log(this);
     return document.querySelector('.player' + this.player + ' .life')
 };
 
@@ -100,6 +93,19 @@ function playerWins(name) {
     return $winTitle;
 };
 
+function createReloadButton() {
+    const $reloadWrap = createElement('div', 'reloadWrap');
+    const $button = createElement('button', 'button');
+
+    $button.innerHTML = 'Restart';
+    $reloadWrap.appendChild($button);
+    $arenas.appendChild($reloadWrap);
+
+    $button.addEventListener('click', function(){
+        window.location.reload();
+    });
+};
+
 $randomButton.addEventListener('click', function(){
     player1.changeHP(getDamage(20));
     player1.renderHP(player1.elHP());
@@ -109,6 +115,7 @@ $randomButton.addEventListener('click', function(){
 
     if (player1.hp === 0 || player2.hp === 0) {
         $randomButton.disabled = true;
+        createReloadButton();
     }
 
     if (player1.hp === 0 && player1.hp < player2.hp) {
