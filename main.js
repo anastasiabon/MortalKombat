@@ -38,8 +38,6 @@ const player2 = {
     renderHP,
 };
 
-const players = [player1, player2];
-
 function getRandom (max) {
     return Math.ceil(Math.random() * max);
 };
@@ -152,30 +150,7 @@ function getUserPlayerAttack(form) {
     return attack;
 }
 
-function handleHP(player, value) {
-    player.changeHP(value);
-    player.renderHP();
-};
-
-$formFight.addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const enemyAttack = getEnemyAttack();
-    const userPlayerAttack = getUserPlayerAttack($formFight);
-
-    for (let item of players) {
-        if (item.userPlayer && userPlayerAttack.defence !== enemyAttack.hit) {
-            handleHP(item, enemyAttack.value);
-        } else if (!item.userPlayer && enemyAttack.defence !== userPlayerAttack.hit) {
-            handleHP(item, userPlayerAttack.value);
-        }
-    }
-
-    if (player1.hp === 0 || player2.hp === 0) {
-        $randomButton.disabled = true;
-        createReloadButton();
-    }
-
+function showResult() {
     if (player1.hp === 0 && player1.hp < player2.hp) {
         $arenas.appendChild(playerWins(player2.name));
     } else if (player2.hp === 0 && player2.hp < player1.hp) {
@@ -183,22 +158,30 @@ $formFight.addEventListener('submit', function (e) {
     } else if (player1.hp === 0 && player2.hp === 0) {
         $arenas.appendChild(playerWins())
     }
+};
+
+$formFight.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const enemy = getEnemyAttack();
+    const player = getUserPlayerAttack($formFight);
+
+    if (player.defence !== enemy.hit) {
+        player1.changeHP((enemy.value));
+        player1.renderHP();
+    }
+
+    if (enemy.defence !== player.hit) {
+        player2.changeHP((enemy.value));
+        player2.renderHP();
+    }
+
+    if (player1.hp === 0 || player2.hp === 0) {
+        $randomButton.disabled = true;
+        createReloadButton();
+    }
+
+    showResult();
 });
 
-// узнаем игрока пользователя (за которого заполняем форму) и его противника
-function getUserPlayer() {
-    const userPlayerInd = getRandom(2) - 1;
-    players[userPlayerInd].userPlayer = true;
-
-    for (let item of players) {
-        if (!item.userPlayer) {
-            item.userPlayer = false;
-            break;
-        }
-    }
-}
-
-// Create a new game
-getUserPlayer();
 createArena();
 
