@@ -71,7 +71,7 @@ const player2 = {
     img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
     weapon: ['frost', 'swords'],
     attack: function() {
-        gite.log(this.name + ' fight');
+        console.log(this.name + ' fight');
     },
     changeHP,
     elHP,
