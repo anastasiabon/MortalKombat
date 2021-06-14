@@ -215,6 +215,8 @@ $formFight.addEventListener('submit', function (e) {
         player1.changeHP((enemy.value));
         player1.renderHP();
         generateLogs('hit', player2, player1);
+    } else {
+        generateLogs('defence', player2, player1);
     }
 
     if (enemy.defence !== player.hit) {
@@ -222,14 +224,8 @@ $formFight.addEventListener('submit', function (e) {
         player2.changeHP((player.value));
         player2.renderHP();
         generateLogs('hit', player1, player2);
-    }
-
-    if (enemy.defence === player.hit) {
+    } else {
         generateLogs('defence', player1, player2);
-    }
-
-    if (player.defence === enemy.hit) {
-        generateLogs('defence', player2, player1);
     }
 
     if (player1.hp === 0 || player2.hp === 0) {
@@ -303,6 +299,8 @@ function generateLogs(type, playerObj1, playerObj2) {
         case 'draw':
             text = logType;
             break;
+        default:
+            text = logType;
     }
     const el = `<p>${text}</p>`;
     $chat.insertAdjacentHTML('afterbegin', el);
