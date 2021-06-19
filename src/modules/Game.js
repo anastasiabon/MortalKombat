@@ -1,4 +1,5 @@
 import Player from "./Player";
+import Service from "./Service";
 import {
     createElement,
     getRandom,
@@ -9,13 +10,14 @@ import {
 import { ATTACK, HIT, PLAYERS } from "../configs/gameConfig";
 import { logsConfig } from "../configs/logsConfig";
 
-export default class Game {
-    constructor() {
-        this.arenas = document.querySelector('.arenas');
-        this.form = document.querySelector('.control');
-        this.randomButton = document.querySelector('.button');
-    }
 
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
+export default class Game {
+    arenas = document.querySelector('.arenas');
+    form = document.querySelector('.control');
+    randomButton = document.querySelector('.button');
     randomPlayers = shuffle(PLAYERS).slice(0, 2);
 
     player1 = new Player({
@@ -80,6 +82,7 @@ export default class Game {
                 break;
             default:
                 text = logType;
+                break;
         }
         const el = `<p>${text}</p>`;
 
@@ -206,5 +209,17 @@ export default class Game {
         this.player2.createPlayer();
 
         this.generateLogs('start', this.player1, this.player2);
+
+        // const serviceMK = new Service();
+
+        // console.log(serviceMK.getPlayers());
+        const getPlayers = async () => {
+            const body = fetch('https://reactmarathon-api.herokuapp.com/api/mk/players')
+                .then(res => res.json());
+
+            return body;
+        }
+
+        console.log(getPlayers());
     }
 }
